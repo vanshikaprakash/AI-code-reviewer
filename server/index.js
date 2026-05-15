@@ -58,4 +58,46 @@ ${code}
 });
 
 const PORT = process.env.PORT || 3001;
+app.post('/api/roast', async (req, res) => {
+  const { code, language } = req.body;
+
+  if (!code || code.trim().length === 0) {
+    return res.status(400).json({ error: 'No code provided' });
+  }
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 1024,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a brutally honest, witty senior developer who roasts bad code like a comedy roast. Be savage, specific, and funny — but keep it about the code, not the person. Respond ONLY with a JSON object, no markdown, no backticks.',
+        },
+        {
+          role: 'user',
+          content: `Roast this ${language || 'code'} and respond ONLY with this JSON format:
+
+{
+  "opening": "<savage one-liner about the code overall>",
+  "roasts": ["<specific roast about a real issue in the code>", ...],
+  "verdict": "<final brutal summary, 1-2 sentences>"
+}
+
+Code:
+\`\`\`${language || ''}
+${code}
+\`\`\``,
+        },
+      ],
+    });
+
+    const raw = completion.choices[0].message.content;
+    const parsed = JSON.parse(raw);
+    res.json(parsed);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to roast code' });
+  }
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
