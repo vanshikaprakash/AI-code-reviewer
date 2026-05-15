@@ -8,7 +8,9 @@ dotenv.config();
 const app = express();
 const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ 
+  origin: ['http://localhost:5173', 'https://codedotreview.vercel.app'] 
+}));
 app.use(express.json());
 
 app.post('/api/review', async (req, res) => {
