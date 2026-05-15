@@ -1,14 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import Anthropic from '@anthropic-ai/sdk';
+import Groq from 'groq-sdk';
 
 dotenv.config();
 
 const app = express();
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-app.use(cors({ origin: 'http://localhost:5173' })); // Vite's default port
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
 app.post('/api/review', async (req, res) => {
@@ -19,13 +19,17 @@ app.post('/api/review', async (req, res) => {
   }
 
   try {
-    const message = await client.messages.create({
-      model: 'claude-opus-4-5',
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       max_tokens: 2048,
       messages: [
         {
+          role: 'system',
+          content: 'You are a senior software engineer doing a code review. Always respond ONLY with a valid JSON object, no markdown, no backticks, no explanation outside the JSON.',
+        },
+        {
           role: 'user',
-          content: `You are a senior software engineer doing a code review. Analyze the following ${language || 'code'} and respond ONLY with a JSON object in this exact format, no markdown, no explanation outside JSON:
+          content: `Analyze the following ${language || 'code'} and respond ONLY with a JSON object in this exact format:
 
 {
   "summary": "1-2 sentence overall assessment",
@@ -44,7 +48,7 @@ ${code}
       ],
     });
 
-    const raw = message.content[0].text;
+    const raw = completion.choices[0].message.content;
     const parsed = JSON.parse(raw);
     res.json(parsed);
   } catch (err) {
