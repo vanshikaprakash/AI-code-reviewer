@@ -68,7 +68,7 @@ export default function App() {
           {loading ? "Analyzing...(may take up to 30s on first load)" : "Review Code"}
         </button>
         <button className="btn btn-roast" onClick={handleRoast} disabled={loading || roasting || !code.trim()}>
-          {roasting ? "Preparing brutal feedback..." : "Analyzing your code... (may take up to 30s on first load)"}
+          {roasting ? "Preparing brutal feedback...(may take up to 30s on first load)" : "Roast Code"}
         </button>
       </div>
 
