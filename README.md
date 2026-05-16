@@ -50,6 +50,7 @@ open `http://localhost:5173`
 - prompt engineering for structured JSON output from LLMs
 - CORS configuration across multiple deployment domains
 - debugging secret scanning failures in git history
+- sometimes all you need is a hard refresh
 
 ---
 
