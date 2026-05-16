@@ -20,7 +20,7 @@ export default function App() {
     if (!code.trim()) return;
     setLoading(true); setReview(null); setRoast(null); setError(null); setMode("review");
     try {
-      const { data } = await axios.post("http://localhost:3001/api/review", { code, language });
+      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com", { code, language });
       setReview(data);
     } catch {
       setError("Something went wrong. Make sure your server is running.");
@@ -31,7 +31,7 @@ export default function App() {
     if (!code.trim()) return;
     setRoasting(true); setReview(null); setRoast(null); setError(null); setMode("roast");
     try {
-      const { data } = await axios.post("http://localhost:3001/api/roast", { code, language });
+      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com/roast", { code, language });
       setRoast(data);
     } catch {
       setError("Something went wrong. Make sure your server is running.");
