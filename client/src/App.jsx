@@ -20,7 +20,7 @@ export default function App() {
     if (!code.trim()) return;
     setLoading(true); setReview(null); setRoast(null); setError(null); setMode("review");
     try {
-      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com", { code, language });
+      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com/api/review", { code, language });
       setReview(data);
     } catch {
       setError("Something went wrong. Make sure your server is running.");
@@ -31,7 +31,7 @@ export default function App() {
     if (!code.trim()) return;
     setRoasting(true); setReview(null); setRoast(null); setError(null); setMode("roast");
     try {
-      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com/roast", { code, language });
+      const { data } = await axios.post("https://ai-code-reviewer-yjab.onrender.com/api/roast", { code, language }, { timeout: 60000 });
       setRoast(data);
     } catch {
       setError("Something went wrong. Make sure your server is running.");
@@ -65,10 +65,10 @@ export default function App() {
 
       <div className="btn-row">
         <button className="btn btn-primary" onClick={handleReview} disabled={loading || roasting || !code.trim()}>
-          {loading ? "Analyzing..." : "Review Code"}
+          {loading ? "Analyzing...(may take up to 30s on first load)" : "Review Code"}
         </button>
         <button className="btn btn-roast" onClick={handleRoast} disabled={loading || roasting || !code.trim()}>
-          {roasting ? "Roasting..." : "Roast My Code"}
+          {roasting ? "Preparing brutal feedback..." : "Analyzing your code... (may take up to 30s on first load)"}
         </button>
       </div>
 
