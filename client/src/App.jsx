@@ -45,7 +45,7 @@ export default function App() {
           <h1 className="logo">code<span className="logo-dot">.</span>review</h1>
           <span className="version">v1.0</span>
         </div>
-        <p className="tagline">Instant AI-powered code analysis — bugs, security, improvements.</p>
+        <p className="tagline">Going to a senior dev is embarassing. Find bugs, security, improvements in your code. Definitely consult a senior dev after this.</p>
       </header>
 
       <div className="controls">
